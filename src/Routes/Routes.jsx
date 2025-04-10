@@ -1,25 +1,68 @@
-import {
-    createBrowserRouter,
-    
-  } from "react-router-dom";
-import LoginPage from "../Pages/LoginPage";
+import {createBrowserRouter} from "react-router-dom";
 import Homepage from "../pages/user/Homepage";
+import PageLayout from "../Layouts/PageLayout";
+import ProductDetails from "../pages/user/ProductDetails";
+import Loginpage from "../pages/user/Loginpage";
+import CartPage from "../pages/user/CartPage";
+import ProductsPage from "../pages/user/ProductsPage"
+import SignupPage from "../pages/user/SignupPage";
 
-  const router = createBrowserRouter([
+
+  export const router = createBrowserRouter([
     {
       path: "/",
-      element: <Homepage />,
+      element: <PageLayout />,
+
+
+    children : [
+
+      { path: "",
+      element: <Homepage />
+
     },
 
     {
-        path: "/login",
-        element: <LoginPage />,
-      },
+      path: "login",
+      element: <Loginpage />
+    
+    }
+    ,
 
-      {
-        path: "/dashboard",
-        element:   <h2 className="text-center mt-5">Hi User, Welcome to dashboard</h2>
-      },
+    {
+      path: "products",
+      element: <ProductsPage />
+    
+    }
+    ,
+
+    {
+      path: "cart",
+      element: <CartPage />
+    
+    }
+    ,
+
+    {
+      path: "signup",
+      element: <SignupPage />
+    
+    }
+    ,
+
+    {
+      path: "ProductDetail/:id",
+      element: <ProductDetails />
+    
+    }
+    
+
+    
+
+
+      ]
+
+    }
+   
+
   ]);
-
-  export default router
+  
