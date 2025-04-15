@@ -1,39 +1,30 @@
-
-//import { useEffect } from 'react'
-//import { useState } from 'react'
-//import axios from 'axios'
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
-import Loading from '../../components/Loading'
-import ProductCard from '../../components/ProductCard'
+function HomePage() {
+ const navigate = useNavigate()
 
-
-function Homepage() {
- // const [Products, setProducts] = useState([])
-  //useEffect(() => {
-  //  axios.get("https://fakestoreapi.com/products").then((res) => {
-
-   //   setProducts(res.data)
-
-  //  }).catch((err) => {
-   //   console.log(err)
-  //  })
- // }, [])
 
   return (
     <div
     className="hero min-h-screen"
     style={{
-      backgroundImage: "url(https://img.freepik.com/premium-photo/two-women-are-posing-with-their-heads-slightly-turned-towards-each-other-hugging-smiling-with-joy-showing-several-shopping-bags-their-hands_283617-4429.jpg?w=1060)",
+      backgroundImage: "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
     }}>
     <div className="hero-overlay"></div>
     <div className="hero-content text-neutral-content text-center">
-      
-        <button className="btn btn-primary">Get Started</button>
-      
+      <div className="max-w-md">
+        <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
+        <p className="mb-5">
+          Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+          quasi. In deleniti eaque aut repudiandae et a id nisi.
+        </p>
+        <button className="btn btn-primary" onClick={()=>navigate("/products")}>Get Started</button>
+      </div>
     </div>
   </div>
-  )
+  );
 }
 
-export default  Homepage;
+export default HomePage

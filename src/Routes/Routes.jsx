@@ -1,11 +1,15 @@
 import {createBrowserRouter} from "react-router-dom";
-import Homepage from "../pages/user/Homepage";
+
 import PageLayout from "../Layouts/PageLayout";
 import ProductDetails from "../pages/user/ProductDetails";
 import Loginpage from "../pages/user/Loginpage";
 import CartPage from "../pages/user/CartPage";
-import ProductsPage from "../pages/user/ProductsPage"
+
 import SignupPage from "../pages/user/SignupPage";
+import AboutPage from "../pages/user/AboutPage";
+
+import HomePage from "../pages/user/Homepage";
+import ProductsPage from "../pages/user/ProductsPage";
 
 
   export const router = createBrowserRouter([
@@ -17,7 +21,7 @@ import SignupPage from "../pages/user/SignupPage";
     children : [
 
       { path: "",
-      element: <Homepage />
+      element: <HomePage />
 
     },
 
@@ -27,7 +31,11 @@ import SignupPage from "../pages/user/SignupPage";
     
     }
     ,
-
+    {
+      path: "about",
+      element: <AboutPage />
+    
+    },
     {
       path: "products",
       element: <ProductsPage />

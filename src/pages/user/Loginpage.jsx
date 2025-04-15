@@ -18,18 +18,18 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    userLogin(formData).then((res) =>{
+    userLogin(formData).then((res) => {
 
-      
-      localStorage.setItem("token",res?.data?.message)
+
+      localStorage.setItem("token", res?.data?.token)
       toast.success(res?.data?.message)
       navigate("/")
 
-    }).catch((err)=>{
+    }).catch((err) => {
 
-      toast.error(err?.respose?.data?.error,"error message")
+      toast.error(err?.response?.data?.error, "error message")
     })
-   
+
   };
 
   return (
