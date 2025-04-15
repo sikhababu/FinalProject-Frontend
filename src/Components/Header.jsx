@@ -36,7 +36,14 @@ function Header() {
           </div>
         </div>
 
-        <div className="flex-none">
+        <div className="flex-none flex items-center gap-2">
+          {/* Join Us Button */}
+          <button
+            className="btn btn-outline btn-sm text-white border-white hover:bg-white hover:text-gray-900"
+            onClick={() => navigate("/login")}
+          >
+            Join us
+          </button>
           {/* Cart */}
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white">
