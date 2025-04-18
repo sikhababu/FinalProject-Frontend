@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { listCart, removeFromCart, clearCart } from "../../services/cartServices";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setCartItems } from "../../features/cart/CartSlice";
 
 function CartPage() {
+  const dispatch = useDispatch();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -10,6 +13,7 @@ function CartPage() {
     listCart()
       .then((res) => {
         setCart(res.data.cart);
+        dispatch(setCartItems(res.data.cart));
         setLoading(false);
       })
       .catch((err) => {
@@ -23,9 +27,8 @@ function CartPage() {
   }, []);
 
   const handleRemove = (productId) => {
-    removeFromCart( productId )
+    removeFromCart(productId)
       .then((res) => {
-        console.log(res)
         toast.success("Product removed");
         fetchCart();
       })
@@ -37,7 +40,6 @@ function CartPage() {
   const handleClearCart = () => {
     clearCart()
       .then((res) => {
-        console.log(res)
         toast.success("Cart cleared");
         fetchCart();
       })
@@ -46,24 +48,24 @@ function CartPage() {
       });
   };
 
-  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (loading) return <div className="text-center mt-10 dark:text-white">Loading...</div>;
 
   if (!cart || cart.products.length === 0) {
     return (
-      <div className="text-center mt-10">
+      <div className="text-center mt-10 dark:text-white">
         <h2 className="text-2xl font-bold">Your cart is empty</h2>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-6 max-w-5xl mx-auto bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
       <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
       <div className="space-y-4">
         {cart.products.map((item) => (
           <div
             key={item.productId._id}
-            className="card bg-base-100 shadow-md flex flex-row items-center p-4"
+            className="card bg-base-100 dark:bg-gray-800 shadow-md flex flex-row items-center p-4"
           >
             <figure className="w-24 h-24 mr-4">
               <img

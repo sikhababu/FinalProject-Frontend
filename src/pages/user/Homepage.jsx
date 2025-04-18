@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { listCart } from '../../services/cartServices';
+import { setCartItems } from '../../features/cart/CartSlice';
 
 
 function HomePage() {
  const navigate = useNavigate()
+ const dispatch = useDispatch()
 
+ const fetchCart = () => {
+  listCart()
+    .then((res) => {
+     
+      dispatch(setCartItems(res.data.cart))
+      
+    })
+    .catch((err) => {
+      toast.error(err?.response?.data?.error || "Failed to fetch cart");
+  
+    });
+};
+
+useEffect(() => {
+  fetchCart();
+}, []);
 
   return (
     <div
