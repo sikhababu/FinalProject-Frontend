@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../../services/userServices";
 import { toast } from "sonner";
 
-const LoginPage = () => {
+const LoginPage = ({ role = "user" }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -17,23 +15,37 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    userLogin(formData).then((res) => {
-      localStorage.setItem("token", res?.data?.token);
-      toast.success(res?.data?.message);
-      navigate("/");
-    }).catch((err) => {
-      toast.error(err?.response?.data?.error, "error message");
-    });
+
+    userLogin(formData, role)
+      .then((res) => {
+        const userId = res?.data?.user?._id
+        const token = res?.data?.token;
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId)
+        toast.success(res?.data?.message);
+
+        // Redirect based on role
+        if (role === "admin") {
+          navigate("/admin/dashboard");
+        } else if (role === "seller") {
+          navigate("/seller/dashboard");
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error || "Login failed");
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-200 dark:bg-gray-900">
       <div className="card w-full max-w-md shadow-xl bg-base-100 dark:bg-gray-800">
         <div className="card-body">
-          <h2 className="text-2xl font-bold text-center mb-4 text-black dark:text-white">Login</h2>
-
-          {error && <div className="alert alert-error mb-4">{error}</div>}
+          <h2 className="text-2xl font-bold text-center mb-4 text-black dark:text-white">
+            {role === "admin" ? "Admin Login" : role === "seller" ? "Seller Login" : "User Login"}
+          </h2>
 
           <form onSubmit={handleSubmit}>
             <div className="form-control mb-4">
@@ -67,6 +79,15 @@ const LoginPage = () => {
             <button type="submit" className="btn btn-primary w-full" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
+            <p className="mt-4 text-sm text-center text-gray-600 dark:text-gray-300">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+              >
+                Sign up here
+              </Link>
+            </p>
           </form>
         </div>
       </div>

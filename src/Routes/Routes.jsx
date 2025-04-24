@@ -10,6 +10,9 @@ import AboutPage from "../pages/user/AboutPage";
 
 import HomePage from "../pages/user/Homepage";
 import ProductsPage from "../pages/user/ProductsPage";
+import Admindashboard from "../pages/admin/Admindashboard";
+import SellerDashboard from "../pages/seller/sellerDashboard";
+import UserProfile from "../pages/user/UserProfile";
 
 
   export const router = createBrowserRouter([
@@ -56,20 +59,63 @@ import ProductsPage from "../pages/user/ProductsPage";
     
     }
     ,
+    {
+      path: "userProfile",
+      element: <UserProfile />
+    
+    }
+    ,
 
     {
       path: "ProductDetail/:id",
       element: <ProductDetails />
     
     }
-    
-
-    
-
 
       ]
 
+    },
+
+    {
+      path: "/admin",
+      element: <PageLayout />,
+
+
+    children : [
+
+      { path: "login",
+      element: <Loginpage role="admin"/>
+
+    },
+    {
+    path: "dashboard",
+    element: <Admindashboard />
+
     }
+  ]},
+
+  {
+    path: "/seller",
+    element: <PageLayout />,
+
+
+  children : [
+
+    { path: "login",
+    element: <Loginpage role="seller"/>
+
+  },
+  {
+  path: "dashboard",
+  element: <SellerDashboard />
+
+}
+  
+  
+  ]
+
+
+}
    
 
   ]);

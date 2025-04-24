@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { listCart, removeFromCart, clearCart } from "../../services/cartServices";
+import { listCart, removeFromCart, clearCart, makePayment } from "../../services/cartServices";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setCartItems } from "../../features/cart/CartSlice";
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(import.meta.env.VITE_PUBLISHED_KEY_STRIPE);
+
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -26,10 +30,46 @@ function CartPage() {
     fetchCart();
   }, []);
 
+  const makePaymentFunction = async () => {
+    if (!cart || !cart.products || cart.products.length === 0) {
+      toast.error("Cart is empty");
+      return;
+    }
+  
+    try {
+      const body = {
+        products: cart.products
+      };
+  
+      const response = await makePayment(body);
+      const session = response.data.sessionId;
+  
+      const stripe = await stripePromise;
+  
+      if (stripe) {
+        const result = await stripe.redirectToCheckout({
+          sessionId: session
+        });
+  
+        if (result.error) {
+          console.error(result.error.message);
+          toast.error(result.error.message);
+        }
+      } else {
+        toast.error("Stripe failed to load");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment initiation failed");
+    }
+  };
+
+
   const handleRemove = (productId) => {
     removeFromCart(productId)
       .then((res) => {
         toast.success("Product removed");
+        console.log(res)
         fetchCart();
       })
       .catch((err) => {
@@ -40,6 +80,7 @@ function CartPage() {
   const handleClearCart = () => {
     clearCart()
       .then((res) => {
+        console.log(res)
         toast.success("Cart cleared");
         fetchCart();
       })
@@ -58,6 +99,8 @@ function CartPage() {
     );
   }
 
+
+
   return (
     <div className="p-6 max-w-5xl mx-auto bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
       <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
@@ -69,7 +112,7 @@ function CartPage() {
           >
             <figure className="w-24 h-24 mr-4">
               <img
-                src={item.productId.image}
+                src={item.productId?.image}
                 alt={item.productId.title}
                 className="object-cover w-full h-full rounded"
               />
@@ -99,7 +142,7 @@ function CartPage() {
           <button className="btn btn-outline" onClick={handleClearCart}>
             Clear Cart
           </button>
-          <button className="btn btn-success">Checkout</button>
+          <button className="btn btn-success" onClick={makePaymentFunction}>Checkout</button>
         </div>
       </div>
     </div>

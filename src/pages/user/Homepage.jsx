@@ -11,8 +11,9 @@ function HomePage() {
  const dispatch = useDispatch()
 
  const fetchCart = () => {
-  listCart()
-    .then((res) => {
+  const isLogged = localStorage.getItem('userId');
+  if(isLogged){
+  listCart().then((res) => {
      
       dispatch(setCartItems(res.data.cart))
       
@@ -20,7 +21,7 @@ function HomePage() {
     .catch((err) => {
       toast.error(err?.response?.data?.error || "Failed to fetch cart");
   
-    });
+    });}
 };
 
 useEffect(() => {
@@ -31,15 +32,14 @@ useEffect(() => {
     <div
     className="hero min-h-screen"
     style={{
-      backgroundImage: "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
+      backgroundImage: "url(https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_758,h_426/https://welpmagazine.com/wp-content/uploads/2020/10/158-758x426.jpeg)",
     }}>
     <div className="hero-overlay"></div>
     <div className="hero-content text-neutral-content text-center">
       <div className="max-w-md">
         <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
         <p className="mb-5">
-          Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-          quasi. In deleniti eaque aut repudiandae et a id nisi.
+          Welcome to your favourite fashion destination!!!
         </p>
         <button className="btn btn-primary" onClick={()=>navigate("/products")}>Get Started</button>
       </div>

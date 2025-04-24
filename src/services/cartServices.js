@@ -21,3 +21,10 @@ export const clearCart = () => {
 export const removeFromCart = (productId) => {
     return userInstance.post("cart/removeFromCart", { productId });
 };
+
+
+export const makePayment = (data) => {
+
+    return userInstance.post("payment/makepayment", data)
+
+}

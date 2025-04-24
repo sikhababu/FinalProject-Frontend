@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Sun, Moon } from 'lucide-react';
+import { clearCart } from '../features/cart/CartSlice';
 
 function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { totalQuantity, totalPrice } = useSelector((state) => state.cart);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -23,11 +25,18 @@ function Header() {
     localStorage.setItem('theme', newMode ? 'dark' : 'light');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // clear token
+    localStorage.removeItem('userId');
+    dispatch(clearCart()); // clear Redux cart state
+    navigate('/login'); // redirect
+  };
+
   return (
     <div className="navbar bg-white text-black dark:bg-gray-900 dark:text-white shadow-md px-4">
       <div className="flex-1 flex items-center gap-6">
         <a className="btn btn-ghost text-xl" onClick={() => navigate('/')}>
-          Sikha's Website
+          My Website
         </a>
 
         <div className="flex items-center gap-2">
@@ -42,10 +51,7 @@ function Header() {
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        <button
-          className="btn btn-outline btn-sm"
-          onClick={() => navigate('/login')}
-        >
+        <button className="btn btn-outline btn-sm" onClick={() => navigate('/login')}>
           Join us
         </button>
 
@@ -80,9 +86,12 @@ function Header() {
             </div>
           </div>
           <ul className="menu menu-sm dropdown-content bg-white dark:bg-gray-900 text-black dark:text-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-            <li><a className="justify-between">Profile <span className="badge">New</span></a></li>
-            <li><a>Settings</a></li>
-            <li><a>Logout</a></li>
+            <li>
+              <button onClick={() => navigate('/userProfile')}>
+                Profile
+              </button>
+            </li>
+            <li><button onClick={handleLogout}>Logout</button></li>
           </ul>
         </div>
       </div>
