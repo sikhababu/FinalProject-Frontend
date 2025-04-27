@@ -107,25 +107,25 @@ function CartPage() {
       <div className="space-y-4">
         {cart.products.map((item) => (
           <div
-            key={item.productId._id}
+            key={item.productId?._id}
             className="card bg-base-100 dark:bg-gray-800 shadow-md flex flex-row items-center p-4"
           >
             <figure className="w-24 h-24 mr-4">
               <img
                 src={item.productId?.image}
-                alt={item.productId.title}
+                alt={item.productId?.title}
                 className="object-cover w-full h-full rounded"
               />
             </figure>
             <div className="flex-1">
-              <h3 className="text-xl font-semibold">{item.productId.title}</h3>
-              <p>Price: ₹{item.productId.price}</p>
-              <p>Quantity: {item.quantity}</p>
+              <h3 className="text-xl font-semibold">{item.productId?.title}</h3>
+              <p>Price: ₹{item.productId?.price}</p>
+              <p>Quantity: {item?.quantity}</p>
             </div>
             <div>
               <button
                 className="btn btn-sm btn-error"
-                onClick={() => handleRemove(item.productId._id)}
+                onClick={() => handleRemove(item.productId?._id)}
               >
                 Remove
               </button>

@@ -68,7 +68,7 @@ function AdminDashboard() {
           type="text"
           name="name"
           placeholder="Name"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full mb-2 bg-white dark:bg-gray-800 text-black dark:text-white"
           value={form.name}
           onChange={handleChange}
         />
@@ -76,7 +76,7 @@ function AdminDashboard() {
           type="email"
           name="email"
           placeholder="Email"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full mb-2 bg-white dark:bg-gray-800 text-black dark:text-white"
           value={form.email}
           onChange={handleChange}
         />
@@ -84,10 +84,11 @@ function AdminDashboard() {
           type="password"
           name="password"
           placeholder="Password"
-          className="input input-bordered w-full mb-2"
+          className="input input-bordered w-full mb-2 bg-white dark:bg-gray-800 text-black dark:text-white"
           value={form.password}
           onChange={handleChange}
         />
+
         <button className="btn btn-primary w-full" onClick={handleSubmit}>
           {editId ? 'Update Seller' : 'Add Seller'}
         </button>

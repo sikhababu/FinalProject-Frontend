@@ -13,6 +13,8 @@ import ProductsPage from "../pages/user/ProductsPage";
 import Admindashboard from "../pages/admin/Admindashboard";
 import SellerDashboard from "../pages/seller/sellerDashboard";
 import UserProfile from "../pages/user/UserProfile";
+import PaymentSuccess from "../pages/user/PaymentSuccess";
+import PaymentFailure from "../pages/user/PaymentFailure";
 
 
   export const router = createBrowserRouter([
@@ -70,7 +72,19 @@ import UserProfile from "../pages/user/UserProfile";
       path: "ProductDetail/:id",
       element: <ProductDetails />
     
+    },
+
+    {
+      path: "payment/success",
+      element: <PaymentSuccess />
+    
+    },
+    {
+      path: "payment/failure",
+      element: <PaymentFailure />
+    
     }
+
 
       ]
 

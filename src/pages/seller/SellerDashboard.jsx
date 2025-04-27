@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-
 import { toast } from "sonner";
 import { createProduct, deleteProduct, listProducts, updateProduct } from "../../services/productServices";
+import { getSellerOrders, updateOrderStatus } from "../../services/orderServices"; // <--- New service functions
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]); // <--- New state for orders
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -23,8 +24,18 @@ const SellerDashboard = () => {
     }
   };
 
+  const fetchOrders = async () => {
+    try {
+      const res = await getSellerOrders(); // API to fetch seller's orders
+      setOrders(res.data);
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to fetch orders");
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchOrders();
   }, []);
 
   const handleChange = (e) => {
@@ -81,10 +92,25 @@ const SellerDashboard = () => {
     }
   };
 
+  const handleStatusChange = async (orderId, currentStatus) => {
+    const nextStatus = 
+      currentStatus === "processing" ? "shipped" :
+      currentStatus === "shipped" ? "delivered" : "delivered"; // no change after delivered
+
+    try {
+      await updateOrderStatus(orderId, nextStatus);
+      toast.success(`Order status updated to ${nextStatus}`);
+      fetchOrders();
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to update status");
+    }
+  };
+
   return (
     <div className="p-4 dark:bg-gray-900 dark:text-white min-h-screen">
       <h2 className="text-2xl font-bold mb-4">Seller Dashboard</h2>
 
+      {/* Product Form */}
       <form
         onSubmit={handleSubmit}
         className="grid gap-4 bg-white dark:bg-gray-800 p-4 rounded shadow-md"
@@ -140,6 +166,7 @@ const SellerDashboard = () => {
         </button>
       </form>
 
+      {/* Products List */}
       <div className="mt-8">
         <h3 className="text-xl font-semibold mb-4">Your Products</h3>
         {products.length === 0 ? (
@@ -155,7 +182,9 @@ const SellerDashboard = () => {
                 <p>{product.description}</p>
                 <p>Price: ${product.price}</p>
                 <p>Stock: {product.stock}</p>
-                <img src={product.image?.url} alt={product.title} className="w-32 mt-2" />
+                {product.image?.url && (
+                  <img src={product.image.url} alt={product.title} className="w-32 mt-2" />
+                )}
                 <div className="flex gap-2 mt-2">
                   <button
                     className="bg-yellow-500 text-white px-3 py-1 rounded"
@@ -169,6 +198,37 @@ const SellerDashboard = () => {
                   >
                     Delete
                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Orders Section */}
+      <div className="mt-12">
+        <h3 className="text-xl font-semibold mb-4">Your Orders</h3>
+        {orders.length === 0 ? (
+          <p>No orders yet.</p>
+        ) : (
+          <div className="grid gap-4">
+            {orders.map((order) => (
+              <div
+                key={order._id}
+                className="border p-4 rounded shadow dark:bg-gray-800"
+              >
+                <p><strong>Order ID:</strong> {order._id}</p>
+                <p><strong>Buyer:</strong> {order.user?.name || "Unknown"}</p>
+                <p><strong>Status:</strong> {order.status}</p>
+                <div className="flex gap-2 mt-2">
+                  {order.status !== "delivered" && (
+                    <button
+                      className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                      onClick={() => handleStatusChange(order._id, order.status)}
+                    >
+                      Mark as {order.status === "processing" ? "Shipped" : "Delivered"}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

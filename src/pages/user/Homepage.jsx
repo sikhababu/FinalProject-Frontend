@@ -1,51 +1,83 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
 import { listCart } from '../../services/cartServices';
 import { setCartItems } from '../../features/cart/CartSlice';
+import { listCategories } from '../../services/categoryServices'; 
 
+const HomePage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [categories, setCategories] = useState([]);
 
-function HomePage() {
- const navigate = useNavigate()
- const dispatch = useDispatch()
+  const fetchCart = () => {
+    const isLogged = localStorage.getItem('userId');
+    if (isLogged) {
+      listCart()
+        .then((res) => {
+          dispatch(setCartItems(res.data.cart));
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.error || "Failed to fetch cart");
+        });
+    }
+  };
 
- const fetchCart = () => {
-  const isLogged = localStorage.getItem('userId');
-  if(isLogged){
-  listCart().then((res) => {
-     
-      dispatch(setCartItems(res.data.cart))
-      
-    })
-    .catch((err) => {
-      toast.error(err?.response?.data?.error || "Failed to fetch cart");
-  
-    });}
-};
+  const fetchCategories = () => {
+    listCategories()
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error || "Failed to fetch categories");
+      });
+  };
 
-useEffect(() => {
-  fetchCart();
-}, []);
+  useEffect(() => {
+    fetchCart();
+    fetchCategories();
+  }, []);
 
   return (
-    <div
-    className="hero min-h-screen"
-    style={{
-      backgroundImage: "url(https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_758,h_426/https://welpmagazine.com/wp-content/uploads/2020/10/158-758x426.jpeg)",
-    }}>
-    <div className="hero-overlay"></div>
-    <div className="hero-content text-neutral-content text-center">
-      <div className="max-w-md">
-        <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
-        <p className="mb-5">
-          Welcome to your favourite fashion destination!!!
-        </p>
-        <button className="btn btn-primary" onClick={()=>navigate("/products")}>Get Started</button>
-      </div>
-    </div>
-  </div>
-  );
-}
+    <div className="text-gray-800">
+      {/* Hero Section */}
+      <section className="relative h-[70vh] bg-cover bg-center flex items-center justify-center text-white"
+        style={{ backgroundImage: 'url(/images/hero.jpg)' }}>
+        <div className="bg-black bg-opacity-50 p-10 rounded-xl text-center">
+          <h1 className="text-4xl font-bold mb-4">Style that Speaks</h1>
+          <p className="mb-6">Discover the latest trends in fashion</p>
+          <button
+            onClick={() => navigate("/products")}
+            className="btn btn-primary px-6 py-2"
+          >
+            Shop Now
+          </button>
+        </div>
+      </section>
 
-export default HomePage
+      {/* Featured Categories */}
+      <section className="py-12 px-6 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-semibold mb-8 text-center text-gray-800 dark:text-white">Shop by Category</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {categories.map((cat) => (
+            <div
+              key={cat._id}
+              onClick={() => navigate(`/products/category/${cat._id}`)}
+              className="cursor-pointer group overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+            >
+              <img
+                src={cat?.image} 
+                alt={cat?.name}
+                className="w-full h-64 object-cover group-hover:scale-105 transition-transform"
+              />
+              <div className="p-4 bg-white text-center font-semibold">{cat?.name}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default HomePage;
