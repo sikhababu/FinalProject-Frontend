@@ -16,7 +16,7 @@ import PaymentSuccess from "../pages/user/PaymentSuccess";
 import PaymentFailure from "../pages/user/PaymentFailure";
 import OrdersPage from "../pages/user/OrdersPage";
 import EditProfilePage from "../pages/user/EditProfilePage";
-import SellerDashboard from "../pages/seller/sellerDashboard";
+import SellerDashboard from "../pages/seller/SellerDashboard";
 
 
   export const router = createBrowserRouter([
