@@ -1,7 +1,6 @@
 import {createBrowserRouter} from "react-router-dom";
 
 import PageLayout from "../Layouts/PageLayout";
-import ProductDetails from "../pages/user/ProductDetails";
 import Loginpage from "../pages/user/Loginpage";
 import CartPage from "../pages/user/CartPage";
 
@@ -15,6 +14,8 @@ import SellerDashboard from "../pages/seller/sellerDashboard";
 import UserProfile from "../pages/user/UserProfile";
 import PaymentSuccess from "../pages/user/PaymentSuccess";
 import PaymentFailure from "../pages/user/PaymentFailure";
+import OrdersPage from "../pages/user/OrdersPage";
+import EditProfilePage from "../pages/user/EditProfilePage";
 
 
   export const router = createBrowserRouter([
@@ -32,7 +33,7 @@ import PaymentFailure from "../pages/user/PaymentFailure";
 
     {
       path: "login",
-      element: <Loginpage />
+      element: <Loginpage role="user"/>
     
     }
     ,
@@ -47,7 +48,11 @@ import PaymentFailure from "../pages/user/PaymentFailure";
     
     }
     ,
-
+    {
+      path: "products/:categoryId",  // dynamic param
+      element: <ProductsPage />
+    },
+    
     {
       path: "cart",
       element: <CartPage />
@@ -68,12 +73,7 @@ import PaymentFailure from "../pages/user/PaymentFailure";
     }
     ,
 
-    {
-      path: "ProductDetail/:id",
-      element: <ProductDetails />
     
-    },
-
     {
       path: "payment/success",
       element: <PaymentSuccess />
@@ -82,6 +82,17 @@ import PaymentFailure from "../pages/user/PaymentFailure";
     {
       path: "payment/failure",
       element: <PaymentFailure />
+    
+    },
+
+    {
+      path: "orders",
+      element: <OrdersPage />
+    
+    },
+    {
+      path: "edit-profile",
+      element: <EditProfilePage />
     
     }
 

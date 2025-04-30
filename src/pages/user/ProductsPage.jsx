@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { listProducts } from '../../services/productServices';
+import { listProducts, listProductsByCategory } from '../../services/productServices';
 import { toast } from 'sonner';
 
 import { addToCart, listCart } from '../../services/cartServices';
 import { setCartItems } from '../../features/cart/CartSlice';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 function ProductsPage() {
   const [Products, setProducts] = useState([]);
   const dispatch = useDispatch();
+  const { categoryId } = useParams();
 
   const fetchCart = () => {
     listCart()
@@ -21,15 +23,24 @@ function ProductsPage() {
   };
 
   useEffect(() => {
-    listProducts()
-      .then((res) => {
-        setProducts(res?.data);
-        console.log(res?.data);
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data?.error || "Error loading products");
-      });
-  }, []);
+    if (categoryId) {
+      listProductsByCategory(categoryId)
+        .then((res) => {
+          setProducts(res?.data);
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.error || "Error loading category products");
+        });
+    } else {
+      listProducts()
+        .then((res) => {
+          setProducts(res?.data);
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.error || "Error loading products");
+        });
+    }
+  }, [categoryId]);
 
   const handleAddToCart = (productId) => {
     addToCart({ productId, quantity: 1 })

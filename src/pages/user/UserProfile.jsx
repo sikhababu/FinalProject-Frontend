@@ -10,7 +10,7 @@ function UserProfile() {
 
   useEffect(() => {
     const userId = localStorage.getItem('userId'); //  userId is stored in localStorage
-   
+
 
     if (!userId) {
       toast.error('User not found or not authenticated');
@@ -40,7 +40,7 @@ function UserProfile() {
       <div className="space-y-4">
         <div className="card bg-base-100 dark:bg-gray-800 shadow-md p-4">
           <div className="flex gap-6">
-           
+
             <div className="flex-1">
               <h3 className="text-xl font-semibold">{userDetails.name}</h3>
               <p className="text-sm">Email : {userDetails.email}</p>
@@ -56,6 +56,14 @@ function UserProfile() {
           onClick={() => navigate('/edit-profile')}
         >
           Edit Profile
+        </button>
+      </div>
+      <div className="flex justify-end mt-4">
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate('/orders')}
+        >
+          View your orders
         </button>
       </div>
     </div>

@@ -6,6 +6,13 @@ return userInstance.get("product/list-products")
 
 }
 
+export const listSellerProducts = () =>{
+
+  return userInstance.get("product/list-seller-products")
+  
+  }
+  
+
 export const createProduct = (formData) => {
     return userInstance.post("/product/create", formData);
   };
@@ -17,3 +24,9 @@ export const createProduct = (formData) => {
   export const deleteProduct = (productId) => {
     return userInstance.delete(`/product/delete-product/${productId}`);
   };
+
+  export const listProductsByCategory = (categoryId) => {
+
+    return userInstance.get(`/product//list-products-cat/${categoryId}`)
+
+}

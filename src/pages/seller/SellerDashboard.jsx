@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { createProduct, deleteProduct, listProducts, updateProduct } from "../../services/productServices";
+import { createProduct, deleteProduct, listSellerProducts, updateProduct } from "../../services/productServices";
 import { getSellerOrders, updateOrderStatus } from "../../services/orderServices"; // <--- New service functions
 
 const SellerDashboard = () => {
@@ -17,7 +17,7 @@ const SellerDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await listProducts();
+      const res = await listSellerProducts();
       setProducts(res.data);
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to fetch products");
@@ -64,7 +64,7 @@ const SellerDashboard = () => {
         toast.success("Product created successfully");
       }
       fetchProducts();
-      setFormData({ title: "", description: "", price: "", stock: "", image: null });
+      setFormData({ title: "", description: "", price: "", stock: "", image: null, category: "" });
     } catch (error) {
       toast.error(error.response?.data?.error || "Operation failed");
     }
@@ -143,10 +143,18 @@ const SellerDashboard = () => {
           required
         />
         <input
-          type="number"
           name="stock"
           placeholder="Stock"
           value={formData.stock}
+          onChange={handleChange}
+          className="p-2 border rounded dark:bg-gray-700"
+          required
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="category"
+          value={formData.category}
           onChange={handleChange}
           className="p-2 border rounded dark:bg-gray-700"
           required
@@ -219,14 +227,26 @@ const SellerDashboard = () => {
               >
                 <p><strong>Order ID:</strong> {order._id}</p>
                 <p><strong>Buyer:</strong> {order.user?.name || "Unknown"}</p>
-                <p><strong>Status:</strong> {order.status}</p>
+                <div>
+                <h4 className="font-semibold mb-2">Products:</h4>
+                <ul className="list-disc list-inside space-y-1">
+                  {order.products.map((product) => (
+                    <li key={product.productId._id}>
+                      {product.productId.title} - Quantity: {product.quantity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p><strong>Payment Status:</strong> {order?.paymentStatus}</p>
+                <p><strong>Order Status:</strong> {order?.orderStatus}</p>
+                
                 <div className="flex gap-2 mt-2">
-                  {order.status !== "delivered" && (
+                  {order.orderStatus !== "delivered" && (
                     <button
                       className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                      onClick={() => handleStatusChange(order._id, order.status)}
+                      onClick={() => handleStatusChange(order._id, order.orderStatus)}
                     >
-                      Mark as {order.status === "processing" ? "Shipped" : "Delivered"}
+                      Mark as {order.orderStatus === "processing" ? "Shipped" : "Delivered"}
                     </button>
                   )}
                 </div>

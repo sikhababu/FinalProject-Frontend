@@ -12,7 +12,9 @@ function Header() {
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme');
-    const prefersDark = storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const prefersDark =
+      storedTheme === 'dark' ||
+      (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     setIsDarkMode(prefersDark);
     document.documentElement.classList.toggle('dark', prefersDark);
@@ -26,27 +28,27 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // clear token
+    localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    dispatch(clearCart()); // clear Redux cart state
-    navigate('/login'); // redirect
+    dispatch(clearCart());
+    navigate('/login');
   };
 
   return (
     <div className="navbar bg-white text-black dark:bg-gray-900 dark:text-white shadow-md px-4">
-      <div className="flex-1 flex items-center gap-6">
+
+      <div className="flex-1 flex flex-wrap items-center gap-4 sm:gap-6">
         <a className="btn btn-ghost text-xl" onClick={() => navigate('/')}>
           My Website
         </a>
-
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button className="btn btn-ghost" onClick={() => navigate('/')}>Home</button>
           <button className="btn btn-ghost" onClick={() => navigate('/about')}>About</button>
           <button className="btn btn-ghost" onClick={() => navigate('/products')}>Products</button>
         </div>
       </div>
 
-      <div className="flex-none flex items-center gap-3">
+      <div className="flex-none flex flex-wrap items-center gap-3">
         <button onClick={toggleDarkMode} className="btn btn-ghost btn-circle">
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
@@ -86,11 +88,7 @@ function Header() {
             </div>
           </div>
           <ul className="menu menu-sm dropdown-content bg-white dark:bg-gray-900 text-black dark:text-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-            <li>
-              <button onClick={() => navigate('/userProfile')}>
-                Profile
-              </button>
-            </li>
+            <li><button onClick={() => navigate('/userProfile')}>Profile</button></li>
             <li><button onClick={handleLogout}>Logout</button></li>
           </ul>
         </div>

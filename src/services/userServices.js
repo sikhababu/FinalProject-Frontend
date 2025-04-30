@@ -12,14 +12,19 @@ export const userLogin = (data, role) => {
     
   };
 
-  export const getUserProfile = (data) => {
-
-    return userInstance.get(`/user/signup`, { ...data });
-    
-  };
+  
 
   export const fetchUserProfile = (userId) => {
     return userInstance.get(`/user/searchuser/${userId}`);
   };
+
+  
+
+// Update user profile
+export const updateUserProfile = (userId, userData) => {
+
+  return userInstance.put(`/user/updateuser/${userId}`,userData);
+  
+};
 
   

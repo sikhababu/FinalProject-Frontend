@@ -5,11 +5,11 @@ import Footer from '../components/Footer';
 
 function PageLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black dark:bg-gray-900 dark:text-white">
+<div className="h-screen flex flex-col overflow-hidden bg-white text-black dark:bg-gray-900 dark:text-white">
       <Header />
-      <div className="flex-1">
+      <main className="flex-1 overflow-auto">
         <Outlet />
-      </div>
+      </main>
       <Footer />
     </div>
   );
