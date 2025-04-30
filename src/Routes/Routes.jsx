@@ -10,12 +10,13 @@ import AboutPage from "../pages/user/AboutPage";
 import HomePage from "../pages/user/Homepage";
 import ProductsPage from "../pages/user/ProductsPage";
 import Admindashboard from "../pages/admin/Admindashboard";
-import SellerDashboard from "../pages/seller/sellerDashboard";
+;
 import UserProfile from "../pages/user/UserProfile";
 import PaymentSuccess from "../pages/user/PaymentSuccess";
 import PaymentFailure from "../pages/user/PaymentFailure";
 import OrdersPage from "../pages/user/OrdersPage";
 import EditProfilePage from "../pages/user/EditProfilePage";
+import SellerDashboard from "../pages/seller/sellerDashboard";
 
 
   export const router = createBrowserRouter([
