@@ -93,9 +93,9 @@ const SellerDashboard = () => {
   };
 
   const handleStatusChange = async (orderId, currentStatus) => {
-    const nextStatus = 
+    const nextStatus =
       currentStatus === "processing" ? "shipped" :
-      currentStatus === "shipped" ? "delivered" : "delivered"; // no change after delivered
+        currentStatus === "shipped" ? "delivered" : "delivered"; // no change after delivered
 
     try {
       await updateOrderStatus(orderId, nextStatus);
@@ -228,18 +228,24 @@ const SellerDashboard = () => {
                 <p><strong>Order ID:</strong> {order._id}</p>
                 <p><strong>Buyer:</strong> {order.user?.name || "Unknown"}</p>
                 <div>
-                <h4 className="font-semibold mb-2">Products:</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  {order.products.map((product) => (
-                    <li key={product.productId._id}>
-                      {product.productId.title} - Quantity: {product.quantity}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <p><strong>Payment Status:</strong> {order?.paymentStatus}</p>
+                  <h4 className="font-semibold mb-2">Products:</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    {order.products.map((product, index) => (
+                      product?.productId ? (
+                        <li key={product.productId._id}>
+                          {product.productId.title} - Quantity: {product.quantity}
+                        </li>
+                      ) : (
+                        <li key={index} className="text-red-500">
+                          Product not found
+                        </li>
+                      )
+                    ))}
+                  </ul>
+                </div>
+                <p><strong>Payment Status:</strong> {order?.paymentStatus}</p>
                 <p><strong>Order Status:</strong> {order?.orderStatus}</p>
-                
+
                 <div className="flex gap-2 mt-2">
                   {order.orderStatus !== "delivered" && (
                     <button
