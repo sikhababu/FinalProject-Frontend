@@ -27,6 +27,6 @@ export const createProduct = (formData) => {
 
   export const listProductsByCategory = (categoryId) => {
 
-    return userInstance.get(`/product//list-products-cat/${categoryId}`)
+    return userInstance.get(`/product/list-products-cat/${categoryId}`)
 
 }
